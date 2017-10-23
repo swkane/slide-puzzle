@@ -5,6 +5,10 @@
   position: absolute;
 }
 
+button {
+  margin: 20px;
+}
+
 #blank {
   background-color: #3E5C76;
 }
