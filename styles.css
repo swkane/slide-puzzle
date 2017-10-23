@@ -1,0 +1,31 @@
+.tile {
+  width: 98px;
+  height: 98px;
+  border: 1px solid black;
+  position: absolute;
+}
+
+#blank {
+  background-color: #3E5C76;
+}
+
+#board {
+  width: 400px;
+  height: 400px;
+}
+
+.right {
+  transform: translateX(42px);
+}
+
+.left {
+  transform: translateX(-42px);
+}
+
+.up {
+  transform: translateY(-42px);
+}
+
+.down {
+  transform: translateY(42px);
+}
