@@ -119,14 +119,14 @@ function simulateMoveTile(id) {
 
 function simMoves() {
   let moveCounter = 0;
-  let arrayOfIndices = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-  console.log("indices: ", arrayOfIndices);
+  let arrayOfIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  console.log("indices: ", arrayOfIds);
   while(moveCounter < 50) {
-    shuffle(arrayOfIndices);
-    console.log("indices: ", arrayOfIndices);
-    for (var i = 0; i < arrayOfIndices.length; i++) {
-      console.log("array[i]: ", arrayOfIndices[i]);
-      if (simulateMoveTile(arrayOfIndices[i])) {
+    shuffle(arrayOfIds);
+    console.log("indices: ", arrayOfIds);
+    for (var i = 0; i < arrayOfIds.length; i++) {
+      console.log("array[i]: ", arrayOfIds[i]);
+      if (simulateMoveTile(arrayOfIds[i])) {
         moveCounter++;
         break;
       }
