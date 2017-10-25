@@ -1,7 +1,6 @@
 .tile {
-  width: 98px;
-  height: 98px;
-  border: 1px solid black;
+  width: 100px;
+  height: 100px;
   position: absolute;
 }
 
@@ -10,7 +9,7 @@ button {
 }
 
 #blank {
-  background-color: #3E5C76;
+  /*background-color: #3E5C76;*/
 }
 
 #board {
