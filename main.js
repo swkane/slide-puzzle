@@ -12,12 +12,6 @@ solution.textContent = 'Solution';
 solution.addEventListener('click', changePuzzle);
 document.body.appendChild(solution);
 
-let random = document.createElement('button');
-random.id = 'random';
-random.textContent = 'Randomize';
-random.addEventListener('click', changePuzzle);
-document.body.appendChild(random);
-
 // establish two arrays to keep track of rows and columns
 let col = [0, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3];
 let row = [0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3];
@@ -26,7 +20,7 @@ let row = [0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3];
 let solvedPicCol = [0, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1];
 let solvedPicRow = [0, 0, 0, 0, 0, 3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1];
 
-// actual data structure we will use
+// copy of solved pattern we will use to shuffle without changing original array
 let picCol = [...solvedPicCol];
 let picRow = [...solvedPicRow];
 
@@ -41,9 +35,13 @@ function changePuzzle(e) {
     board.removeChild(document.getElementById('blank'));
   }
   if (e.target.id === 'random') {
-    array = shuffle(array);
+    // remove 0 before randomizing
+    array.shift();
+    shuffle(array);
+    // put 0 back at the beginning
+    array.unshift(0);
   } else if (e.target.id === 'solution') {
-    array = solve(array);
+    solve(array);
     picCol = [...solvedPicCol];
     picRow = [...solvedPicRow];
   }
@@ -67,6 +65,14 @@ function changePuzzle(e) {
   }
   // establishing the element to be used for moving tiles
   let blank = document.getElementById('blank');
+
+  // add mix button
+  // FIXME: I only want to run this code after the first click of this button
+  let mixBoard = document.createElement('button');
+  mixBoard.id = 'mixBoard';
+  mixBoard.textContent = 'Mix Board';
+  mixBoard.addEventListener('click', simMoves);
+  document.body.appendChild(mixBoard);
 }
 
 function moveTile(e) {
@@ -90,17 +96,46 @@ function moveTile(e) {
 }
 
 // beginning of the implementation of the shuffle move simulator
-function shuffleSwapTile(id) {
-  let tile = document.getElementById(id);
-  let tilex = parseInt(tile.style.left, 10);
-  let tiley = parseInt(tile.style.top, 10);
+function simulateMoveTile(id) {
+  let e = document.getElementById(id);
+  let widthOfTile = e.offsetWidth;
+  let ex = parseInt(e.style.left, 10);
+  let ey = parseInt(e.style.top, 10);
+  let blankx = parseInt(blank.style.left, 10);
+  let blanky = parseInt(blank.style.top, 10);
+
+  if (Math.abs(ex - blankx) === widthOfTile && ey === blanky || Math.abs(ey - blanky) === widthOfTile && ex === blankx) {
+    newBlankX = e.style.left;
+    newBlankY = e.style.top;
+    e.style.left = blank.style.left;
+    e.style.top = blank.style.top;
+    blank.style.left = newBlankX;
+    blank.style.top = newBlankY;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function simMoves() {
+  let moveCounter = 0;
+  let arrayOfIndices = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  console.log("indices: ", arrayOfIndices);
+  while(moveCounter < 50) {
+    shuffle(arrayOfIndices);
+    console.log("indices: ", arrayOfIndices);
+    for (var i = 0; i < arrayOfIndices.length; i++) {
+      console.log("array[i]: ", arrayOfIndices[i]);
+      if (simulateMoveTile(arrayOfIndices[i])) {
+        moveCounter++;
+        break;
+      }
+    }
+  }
 }
 
 function shuffle(arr) {
-  // remove 0 before randomizing
-  arr.shift();
   var currentIndex = arr.length, temporaryValue, randomIndex;
-
   // while their remains elements to shuffle
   while (currentIndex !== 0) {
     // pick a remaining element
@@ -111,8 +146,6 @@ function shuffle(arr) {
     arr[currentIndex] = arr[randomIndex];
     arr[randomIndex] = temporaryValue;
   }
-  // put 0 back at the beginning
-  arr.unshift(0);
   return arr;
 }
 
