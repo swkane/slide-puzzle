@@ -28,12 +28,23 @@ let picRow = [...solvedPicRow];
 let array = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
 
 function changePuzzle(e) {
+  // Check if code has run before, if so wipe the board clean
   if (board.hasChildNodes()) {
     for (var i = 1; i < 16; i++) {
       board.removeChild(document.getElementById(i));
     }
     board.removeChild(document.getElementById('blank'));
+  } else {
+    // establishing the element to be used for moving tiles
+    let blank = document.getElementById('blank');
+    // add mix button
+    let mixBoard = document.createElement('button');
+    mixBoard.id = 'mixBoard';
+    mixBoard.textContent = 'Mix Board';
+    mixBoard.addEventListener('click', simMoves);
+    document.body.appendChild(mixBoard);
   }
+  
   if (e.target.id === 'random') {
     // remove 0 before randomizing
     array.shift();
@@ -63,16 +74,6 @@ function changePuzzle(e) {
       // tile.textContent = array[i];
     }
   }
-  // establishing the element to be used for moving tiles
-  let blank = document.getElementById('blank');
-
-  // add mix button
-  // FIXME: I only want to run this code after the first click of this button
-  let mixBoard = document.createElement('button');
-  mixBoard.id = 'mixBoard';
-  mixBoard.textContent = 'Mix Board';
-  mixBoard.addEventListener('click', simMoves);
-  document.body.appendChild(mixBoard);
 }
 
 function moveTile(e) {
@@ -120,12 +121,12 @@ function simulateMoveTile(id) {
 function simMoves() {
   let moveCounter = 0;
   let arrayOfIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-  console.log("indices: ", arrayOfIds);
+  console.log("id's: ", arrayOfIds);
   while(moveCounter < 50) {
     shuffle(arrayOfIds);
-    console.log("indices: ", arrayOfIds);
+    console.log("id's: ", arrayOfIds);
     for (var i = 0; i < arrayOfIds.length; i++) {
-      console.log("array[i]: ", arrayOfIds[i]);
+      console.log("arrayOfIds[i]: ", arrayOfIds[i]);
       if (simulateMoveTile(arrayOfIds[i])) {
         moveCounter++;
         break;
